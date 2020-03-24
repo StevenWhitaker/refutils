@@ -6,6 +6,7 @@ It is also meant to replace Mendeley,
 which I have used on and off for a couple years,
 but I have never been very satisfied with it.
 My main complaints about Mendeley are
+
 - to view a PDF with my highlights/comments,
   I have to open a website or application that is much heavier
   than a simple PDF viewer;
@@ -18,6 +19,7 @@ My main complaints about Mendeley are
   (while this is somewhat facetious,
   one result is that I can't easily debug when things go wrong
   like in the previous point).
+
 My aim is to overcome these limitations
 and provide a clean command line interface
 for easily managing references.
