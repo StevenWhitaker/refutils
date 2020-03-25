@@ -37,6 +37,52 @@ struct TechReport <: ReferenceType end
 struct Unpublished <: ReferenceType end
 
 """
+    reqfields
+
+Required fields for the different reference types. See Templates heading at
+https://www.bibtex.com/format/ (accessed 2020-03-25 at 11:17 AM).
+"""
+const reqfields = Dict(
+    Article() => ["author", "title", "journal", "year"],
+    Book() => ["author", "title", "publisher", "year"],
+    Booklet() => ["title"],
+    Conference() => ["author", "title"],
+    InBook() => ["author", "title", "chapter", "publisher", "year"],
+    InCollection() => ["author", "title", "booktitle"],
+    InProceedings() => ["author", "title"],
+    Manual() => ["title"],
+    MasterThesis() => ["author", "title", "school", "year"],
+    Misc() => String[],
+    PhdThesis() => ["author", "title", "school", "year"],
+    Proceedings() => ["title", "year"],
+    TechReport() => ["author", "title", "institution", "year"],
+    Unpublished() => ["author", "title"]
+)
+
+"""
+    optfields
+
+Optional fields for the different reference types. See Templates heading at
+https://www.bibtex.com/format/ (accessed 2020-03-25 at 11:17 AM).
+"""
+const optfields = Dict(
+    Article() => ["month", "volume", "number", "pages", "doi"],
+    Book() => ["month", "volume", "number", "series", "address", "edition"],
+    Booklet() => ["author", "howpublished", "address", "year", "month"],
+    Conference() => ["booktitle", "year", "month", "editor", "volume", "number", "series", "pages", "address", "organization", "publisher", "url"],
+    InBook() => ["month", "volume", "number", "series", "type", "address", "edition", "pages"],
+    InCollection() => ["publisher", "editor", "year", "month", "volume", "number", "series", "type", "chapter", "pages", "edition", "address"],
+    InProceedings() => ["booktitle", "year", "month", "editor", "volume", "number", "series", "pages", "address", "organization", "publisher", "url"],
+    Manual() => ["author", "organization", "address", "edition", "year", "month"],
+    MasterThesis() => ["month", "type", "address", "url"],
+    Misc() => ["author", "title", "year", "month", "howpublished", "url"],
+    PhdThesis() => ["month", "type", "address", "url"],
+    Proceedings() => ["month", "booktitle", "editor", "volume", "number", "series", "address", "organization", "publisher", "url"],
+    TechReport() => ["month", "type", "number", "address"],
+    Unpublished() => ["year", "month", "url"]
+)
+
+"""
     Reference(type, key, fields, [tags], [note])
 
 Construct a `Reference` object to represent .bib file entries.
@@ -89,3 +135,21 @@ function Reference(
     return Reference(type, key, fields, Symbol[], note)
 
 end
+
+"""
+    requiredfields(reference)
+    requiredfeilds(referencetype)
+
+Return a list of the required fields of the given reference (type).
+"""
+requiredfields(reference::Reference{T}) where {T<:ReferenceType} = requiredfields(T())
+requiredfields(referencetype::ReferenceType) = reqfields[referencetype]
+
+"""
+    optionalfields(reference)
+    optionalfeilds(referencetype)
+
+Return a list of the optional fields of the given reference (type).
+"""
+optionalfields(reference::Reference{T}) where {T<:ReferenceType} = optionalfields(T())
+optionalfields(referencetype::ReferenceType) = optfields[referencetype]
