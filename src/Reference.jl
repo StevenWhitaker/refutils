@@ -138,7 +138,7 @@ end
 
 """
     requiredfields(reference)
-    requiredfeilds(referencetype)
+    requiredfields(referencetype)
 
 Return a list of the required fields of the given reference (type).
 """
@@ -147,7 +147,7 @@ requiredfields(referencetype::ReferenceType) = reqfields[referencetype]
 
 """
     optionalfields(reference)
-    optionalfeilds(referencetype)
+    optionalfields(referencetype)
 
 Return a list of the optional fields of the given reference (type).
 """
