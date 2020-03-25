@@ -1,5 +1,3 @@
-include("../src/Reference.jl")
-
 function Reference_test_req(type::ReferenceType)
 
     ref = Reference(type, "key:20:key",

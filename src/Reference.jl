@@ -170,13 +170,24 @@ Return a list of the optional fields of the given reference (type).
 optionalfields(reference::Reference{T}) where {T<:ReferenceType} = optionalfields(T())
 optionalfields(referencetype::ReferenceType) = optfields[referencetype]
 
+"""
+    hasrequired(reference)
+
+Check whether the given reference contains all the required fields.
+"""
+function hasrequired(reference::Reference)
+
+    return all(map(key -> haskey(reference.fields, key), requiredfields(reference)))
+
+end
+
 # Custom pretty-printing (used to generate a valid .bib entry from a Reference)
 function Base.show(io::IO, r::Reference{T}) where {T<:ReferenceType}
 
     # Print the required fields
     req = ""
     for key in requiredfields(r)
-        req *= "    $key = {$(r.fields[key])},\n"
+        haskey(r.fields, key) && (req *= "    $key = {$(r.fields[key])},\n")
     end
 
     # Print the optional fields
