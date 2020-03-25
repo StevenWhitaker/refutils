@@ -82,6 +82,22 @@ const optfields = Dict(
     Unpublished() => ["year", "month", "url"]
 )
 
+# Make String representations of all reference types
+String(::Article) = "ARTICLE"
+String(::Book) = "BOOK"
+String(::Booklet) = "BOOKLET"
+String(::Conference) = "CONFERENCE"
+String(::InBook) = "INBOOK"
+String(::InCollection) = "INCOLLECTION"
+String(::InProceedings) = "INPROCEEDINGS"
+String(::Manual) = "MANUAL"
+String(::MasterThesis) = "MASTERTHESIS"
+String(::Misc) = "MISC"
+String(::PhdThesis) = "PHDTHESIS"
+String(::Proceedings) = "PROCEEDINGS"
+String(::TechReport) = "TECHREPORT"
+String(::Unpublished) = "UNPUBLISHED"
+
 """
     Reference(type, key, fields, [tags], [note])
 
@@ -153,3 +169,49 @@ Return a list of the optional fields of the given reference (type).
 """
 optionalfields(reference::Reference{T}) where {T<:ReferenceType} = optionalfields(T())
 optionalfields(referencetype::ReferenceType) = optfields[referencetype]
+
+# Custom pretty-printing (used to generate a valid .bib entry from a Reference)
+function Base.show(io::IO, r::Reference{T}) where {T<:ReferenceType}
+
+    # Print the required fields
+    req = ""
+    for key in requiredfields(r)
+        req *= "    $key = {$(r.fields[key])},\n"
+    end
+
+    # Print the optional fields
+    opt = ""
+    for key in optionalfields(r)
+        haskey(r.fields, key) && (opt *= "    $key = {$(r.fields[key])},\n")
+    end
+
+    # Print any remaining fields, sorted lexicographically
+    # collect function is needed because sort is not defined on KeySet's
+    rest = ""
+    for key in sort(collect(keys(r.fields)))
+        key ∉ requiredfields(r) && key ∉ optionalfields(r) &&
+            (rest *= "    $key = {$(r.fields[key])},\n")
+    end
+
+    print(io, "@", String(T()), "{", r.key, ",\n", req, opt, rest, "}\n")
+
+end
+
+# Custom pretty-printing for also displaying tags and note
+function Base.show(io::IO, ::MIME"text/plain", r::Reference{T}) where {T}
+
+    # Print tags
+    tags = "Tags:"
+    for t in r.tags
+        tags *= " $t"
+    end
+
+    print(io, r, "\nNote: ", r.note, "\n\n", tags)
+
+end
+
+# Implement isless to enable sorting the master .bib file
+# Sorting will be by citation key, partly because it is easiest because all
+# references require a unique key. It also ends up sorting references by author
+# then by year.
+Base.isless(r1::Reference, r2::Reference) = r1.key < r2.key
