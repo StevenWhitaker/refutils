@@ -37,17 +37,19 @@ struct TechReport <: ReferenceType end
 struct Unpublished <: ReferenceType end
 
 """
-    Reference(type, fields, [tags], [note])
+    Reference(type, key, fields, [tags], [note])
 
 Construct a `Reference` object to represent .bib file entries.
 
 # Arguments
 - `type::ReferenceType`: Type of reference (e.g., Article, Conference, etc.)
+- `key::String`: Citation key
 - `fields::Dict{String,String}`: Set of (field, value) pairs (e.g., year = 2019)
 - `tags::Vector{Symbol} = Symbol[]`: Set of tags for organizing
 - `note::String = ""`: General notes about the reference
 """
 struct Reference{T<:ReferenceType}
+    key::String
     fields::Dict{String,String}
     tags::Vector{Symbol}
     note::String
@@ -55,32 +57,35 @@ end
 
 function Reference(
     type::ReferenceType,
+    key::String,
     fields::Dict{String,String},
     tags::Vector{Symbol} = Symbol[],
     note::String = ""
 )
 
-    return Reference{typeof(type)}(fields, tags, note)
+    return Reference{typeof(type)}(key, fields, tags, note)
 
 end
 
 function Reference(
     type::ReferenceType,
+    key::String,
     fields::Dict{String,String},
     tag::Symbol,
     note::String = ""
 )
 
-    return Reference(type, fields, [tag], note)
+    return Reference(type, key, fields, [tag], note)
 
 end
 
 function Reference(
     type::ReferenceType,
+    key::String,
     fields::Dict{String,String},
     note::String
 )
 
-    return Reference(type, fields, String[], note)
+    return Reference(type, key, fields, Symbol[], note)
 
 end
