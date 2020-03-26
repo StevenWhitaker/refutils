@@ -98,6 +98,60 @@ String(::Proceedings) = "PROCEEDINGS"
 String(::TechReport) = "TECHREPORT"
 String(::Unpublished) = "UNPUBLISHED"
 
+# Convert from Strings to ReferenceTypes
+function referencetype(type::AbstractString)
+
+    type = uppercase(type)
+    if type == "ARTICLE"
+        return Article()
+    elseif type == "BOOK"
+        return Book()
+    elseif type == "BOOKLET"
+        return Booklet()
+    elseif type == "CONFERENCE"
+        return Conference()
+    elseif type == "INBOOK"
+        return InBook()
+    elseif type == "INCOLLECTION"
+        return InCollection()
+    elseif type == "INPROCEEDINGS"
+        return InProceedings()
+    elseif type == "MANUAL"
+        return Manual()
+    elseif type == "MASTERTHESIS"
+        return MasterThesis()
+    elseif type == "MISC"
+        return Misc()
+    elseif type == "PHDTHESIS"
+        return PhdThesis()
+    elseif type == "PROCEEDINGS"
+        return Proceedings()
+    elseif type == "TECHREPORT"
+        return TechReport()
+    elseif type == "UNPUBLISHED"
+        return Unpublished()
+    else
+        throw(BadReferenceTypeError(type))
+    end
+
+end
+
+"""
+    BadReferenceTypeError(type)
+
+Error to throw when an incorrect reference type is found in a .bib file.
+"""
+struct BadReferenceTypeError <:Exception
+    type::String
+end
+
+function Base.showerror(io::IO, err::BadReferenceTypeError)
+
+    print(io, "BadReferenceTypeError: an invalid reference type was found: ")
+    print(io, err.type)
+
+end
+
 """
     Reference(type, key, fields, [tags], [note])
 
