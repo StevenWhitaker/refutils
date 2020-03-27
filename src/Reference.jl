@@ -173,7 +173,7 @@ end
 
 function Reference(
     type::ReferenceType,
-    key::String,
+    key::AbstractString,
     fields::Dict{String,String},
     tags::Vector{Symbol} = Symbol[],
     note::String = ""
@@ -185,7 +185,7 @@ end
 
 function Reference(
     type::ReferenceType,
-    key::String,
+    key::AbstractString,
     fields::Dict{String,String},
     tag::Symbol,
     note::String = ""
@@ -197,7 +197,7 @@ end
 
 function Reference(
     type::ReferenceType,
-    key::String,
+    key::AbstractString,
     fields::Dict{String,String},
     note::String
 )
@@ -280,3 +280,16 @@ end
 # references require a unique key. It also ends up sorting references by author
 # then by year.
 Base.isless(r1::Reference, r2::Reference) = r1.key < r2.key
+
+# Implement == to enable checking to see if two Reference objects are the same
+function Base.:(==)(r1::Reference{T1}, r2::Reference{T2}) where {T1<:ReferenceType, T2<:ReferenceType}
+
+    if T1 === T2 &&
+       r1.key == r2.key &&
+       r1.fields == r2.fields
+        return true
+    else
+        return false
+    end
+
+end
