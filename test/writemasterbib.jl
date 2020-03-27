@@ -6,14 +6,14 @@ function writemasterbib_test_1()
                        "title" => "Myelin water fraction",
                        "year" => "2020"
                       )
-                 )
+                 ),
         Reference(Article(), "whitaker:20:awf",
                   Dict("author" => "Whitaker",
                        "title" => "Absolute water fraction",
                        "year" => "2020",
                        "journal" => "MRM"
                       )
-                 )
+                 ),
         Reference(Conference(), "whitaker:19:mwf",
                   Dict("author" => "Whitaker",
                        "title" => "Myelin water fraction",
@@ -35,14 +35,14 @@ function writemasterbib_test_2()
                        "year" => "2020",
                        "journal" => "JMRI"
                       )
-                 )
+                 ),
         Reference(Article(), "whitaker:20:awf",
                   Dict("author" => "Whitaker",
                        "title" => "Absolute water fraction",
                        "year" => "2020",
                        "journal" => "MRM"
                       )
-                 )
+                 ),
         Reference(Conference(), "whitaker:19:mwf",
                   Dict("author" => "Whitaker",
                        "title" => "Myelin water fraction",
